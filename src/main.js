@@ -8,7 +8,8 @@ const refs = {
     formEl: document.querySelector('.js-search-form'),
     imgEl: document.querySelector('.js-image-container'),
     loaderEl: document.querySelector('.loader'),
-    loadMoreBtn: document.querySelector('.load-more-btn')
+    loadMoreBtn: document.querySelector('.load-more-btn'), 
+    loaderBottom: document.querySelector('.loadMore')
 };
 
 let currentPage = 1;
@@ -63,40 +64,25 @@ async function onFormSubmit(e) {
     }
 }
 
-// async function loadMoreImages() {
-//     try {
-//         const data = await getImg(currentQuery, currentPage);
-//         renderImg(data);
-//         if (data.hits.length === 0) {
-//             toggleLoadMoreButton(false);
-//             // Show message about end of collection
-//         } else {
-//             currentPage++;
-//         }
-//     } catch (error) {
-//         console.error('Error fetching more images:', error);
-//         // Show error message
-//     }
-// }
+
 async function loadMoreImages() {
     try {
-        toggleLoaderChange(true);
+        toggleLoadMoreButton(false);
+        toggleLoadMore(true);
         const data = await getImg(currentQuery, currentPage);
         renderImg(data);
-        toggleLoaderChange(false);
+        
         if (data.hits.length === 0) {
-            toggleLoadMoreButton(false);
-            toggleLoaderChange(false);
-            // Показати повідомлення про кінець колекції
+           
+           toggleLoadMore(false);
             showEndOfSearchMessage();
         } else {
-            toggleLoaderChange(false);
+            toggleLoadMoreButton(true);
             currentPage++;
         }
     } catch (error) {
-        toggleLoaderChange(false);
+        
         console.error('Error fetching more images:', error);
-        // Показати повідомлення про помилку
     }
 }
 
@@ -150,7 +136,7 @@ function imgTemplate(photo) {
 }
 
 function renderImg(data) {
-    toggleLoadMoreButton(false);
+   
     if (currentPage === 1) {
         clearGallery();
     }
@@ -160,18 +146,19 @@ function renderImg(data) {
     lightbox.refresh();
 
     toggleLoadMoreButton(true);
+    toggleLoadMore(false);
     smoothScrollToNextImages();
 }
 
 function smoothScrollToNextImages() {
-    const galleryItem = document.querySelector('.photo-container'); // Отримуємо перший елемент галереї
+    const galleryItem = document.querySelector('.photo-container'); 
     if (galleryItem) {
-        const cardHeight = galleryItem.getBoundingClientRect().height; // Отримуємо висоту карточки галереї
-        const scrollAmount = cardHeight * 2; // Обчислюємо кількість пікселів для прокрутки
+        const cardHeight = galleryItem.getBoundingClientRect().height; 
+        const scrollAmount = cardHeight * 2; 
 
         window.scrollBy({
             top: scrollAmount,
-            behavior: 'smooth' // Включаємо плавну прокрутку
+            behavior: 'smooth' 
         });
     }
 }
@@ -187,7 +174,7 @@ function toggleLoader(isVisible) {
 function toggleLoadMoreButton(isVisible) {
     refs.loadMoreBtn.style.display = isVisible ? 'block' : 'none';
 }
-function toggleLoaderChange(isTrue) {
-    refs.loaderEl.style.display = isTrue ? 'inline-block' : 'none';
-    refs.loaderEl.style.bottom = isTrue ? '0' : '50%';
+function toggleLoadMore(isVisible) {
+    refs.loaderBottom.style.display = isVisible ? 'block' : 'none';
+    
 }

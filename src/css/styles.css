@@ -186,3 +186,14 @@ button:hover {
   margin-top: 5px;
   z-index: 1000;
 }
+.loadMore {
+  width: auto;
+  padding: 10px 0;
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  font-size: 16px;
+  color: #2E2F42;
+
+}
