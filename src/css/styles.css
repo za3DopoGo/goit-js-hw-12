@@ -69,6 +69,8 @@ button:hover {
 .load-more-btn {
   width: auto;
   margin: auto;
+  position: relative;
+
 }
 
 .search-form input:hover {
@@ -94,6 +96,7 @@ button:hover {
   justify-content: center;
   padding-top: 32px;
   margin: auto;
+  margin-bottom: 10px;
   width: 100%;
   min-width: 624px;
   /* height: 152px; */
@@ -190,9 +193,8 @@ button:hover {
   width: auto;
   padding: 10px 0;
   display: none;
-  position: fixed;
-  bottom: 0;
-  left: 50%;
+  
+  margin: auto;
   font-size: 16px;
   color: #2E2F42;
 
