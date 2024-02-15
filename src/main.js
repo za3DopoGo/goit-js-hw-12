@@ -44,7 +44,7 @@ async function onFormSubmit(e) {
         if (data.hits.length === 0) {
             toggleLoader(false);
             toggleLoadMoreButton(false);
-            // Show message about end of collection
+            
         } else {
             toggleLoadMoreButton(true);
             toggleLoader(false);
@@ -72,10 +72,16 @@ async function loadMoreImages() {
         const data = await getImg(currentQuery, currentPage);
         renderImg(data);
         
-        if (data.hits.length === 0) {
+        if (data.hits.length < 15) {
            
            toggleLoadMore(false);
-            showEndOfSearchMessage();
+           toggleLoadMoreButton(false);
+            iziToast.show({
+                title: '',
+                message: "We're sorry, but you've reached the end of search results.",
+                color: 'red',
+                position: 'topRight'
+            });
         } else {
             toggleLoadMoreButton(true);
             currentPage++;
@@ -85,13 +91,6 @@ async function loadMoreImages() {
         console.error('Error fetching more images:', error);
     }
 }
-
-function showEndOfSearchMessage() {
-    const endOfSearchMessage = document.createElement('p');
-    endOfSearchMessage.textContent = "We're sorry, but you've reached the end of search results.";
-    refs.imgEl.insertAdjacentElement('beforebegin', endOfSearchMessage);
-}
-
 
 async function getImg(query, page = 1) {
     const BASE_URL = 'https://pixabay.com/api/';
