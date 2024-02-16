@@ -193,9 +193,11 @@ button:hover {
   width: auto;
   padding: 10px 0;
   display: none;
-  
+  text-align: center;
   margin: auto;
   font-size: 16px;
   color: #2E2F42;
-
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }

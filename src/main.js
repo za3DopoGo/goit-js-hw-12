@@ -1,3 +1,4 @@
+
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 import axios from "axios";
@@ -36,34 +37,40 @@ async function onFormSubmit(e) {
         return;
     }
 
-    toggleLoader(true);
+    // toggleLoader(true);
+    toggleLoadMore(true);
 
     try {
         const data = await getImg(currentQuery, currentPage);
         renderImg(data);
         if (data.hits.length === 0) {
+            iziToast.info({
+                position: "topRight",
+                message: "No images found for the entered query.",
+            });
             toggleLoader(false);
+            toggleLoadMore(false);
             toggleLoadMoreButton(false);
-            
         } else {
             toggleLoadMoreButton(true);
             toggleLoader(false);
+            toggleLoadMore(false);
             currentPage++;
         }
     } catch (error) {
         console.error('Error fetching images:', error);
-        toggleLoader(false);
-        toggleLoadMoreButton(false);
-        clearGallery();
         iziToast.error({
             position: "topRight",
             message: 'Failed to fetch images. Please try again later.',
         });
+        toggleLoader(false);
+        toggleLoadMoreButton(false);
+        toggleLoadMore(false);
+        clearGallery();
     } finally {
         e.target.elements.text.value = '';
     }
 }
-
 
 async function loadMoreImages() {
     try {
@@ -73,9 +80,8 @@ async function loadMoreImages() {
         renderImg(data);
         
         if (data.hits.length < 15) {
-           
-           toggleLoadMore(false);
-           toggleLoadMoreButton(false);
+            toggleLoadMore(false);
+            toggleLoadMoreButton(false);
             iziToast.show({
                 title: '',
                 message: "We're sorry, but you've reached the end of search results.",
@@ -87,8 +93,11 @@ async function loadMoreImages() {
             currentPage++;
         }
     } catch (error) {
-        
         console.error('Error fetching more images:', error);
+        iziToast.error({
+            position: "topRight",
+            message: 'Failed to fetch more images. Please try again later.',
+        });
     }
 }
 
@@ -135,8 +144,8 @@ function imgTemplate(photo) {
 }
 
 function renderImg(data) {
-   
     if (currentPage === 1) {
+        
         clearGallery();
     }
     refs.imgEl.innerHTML += data.hits.map(img => imgTemplate(img)).join('');
@@ -161,6 +170,7 @@ function smoothScrollToNextImages() {
         });
     }
 }
+
 function clearGallery() {
     refs.imgEl.innerHTML = '';
 }
@@ -173,7 +183,7 @@ function toggleLoader(isVisible) {
 function toggleLoadMoreButton(isVisible) {
     refs.loadMoreBtn.style.display = isVisible ? 'block' : 'none';
 }
+
 function toggleLoadMore(isVisible) {
-    refs.loaderBottom.style.display = isVisible ? 'block' : 'none';
-    
+    refs.loaderBottom.style.display = isVisible ? 'inline-block' : 'none';
 }
